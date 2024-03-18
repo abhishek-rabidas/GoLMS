@@ -1,5 +1,6 @@
 {
   "server": {
     "port": "3051"
-  }
+  },
+  "secretKey" : "hihfy9YHIFHIEHFLKDFLKHSOPFYWPY3RPHhaifhwyer09fhopafohw90tysdjblgfiup"
 }

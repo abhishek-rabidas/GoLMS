@@ -3,6 +3,7 @@ package service
 import (
 	log "github.com/sirupsen/logrus"
 	"gomvc/resources"
+	"gomvc/util"
 	"gomvc/views"
 )
 
@@ -21,6 +22,11 @@ func (us *UserService) LoginUser(email, password string) (views.UserResponse, er
 		return views.UserResponse{}, err
 	}
 
-	return *res, nil
+	res.Token = util.GenerateNewTokenForUser(res.Email, res.UserType)
 
+	return *res, nil
+}
+
+func (us *UserService) ValidateToken(tokenString string) error {
+	return util.VerifyToken(tokenString[7:])
 }
