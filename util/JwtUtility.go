@@ -25,6 +25,8 @@ func VerifyToken(tokenString string) error {
 		return secretKey, nil
 	})
 
+	// TODO: Check expiry
+
 	if err != nil {
 		return err
 	}
