@@ -28,5 +28,6 @@ func (us *UserService) LoginUser(email, password string) (views.UserResponse, er
 }
 
 func (us *UserService) ValidateToken(tokenString string) error {
-	return util.VerifyToken(tokenString[7:])
+	err, _ := util.VerifyToken(tokenString)
+	return err
 }

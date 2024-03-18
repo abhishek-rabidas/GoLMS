@@ -37,7 +37,18 @@ func PopulateUsers() {
 
 	users["abhishekrabidas07@gmail.com"] = user1
 	users["abhishekrabidas7@gmail.com"] = user2
-	
+
+}
+
+func GetUser(email string) (model.User, error) {
+	user, isExists := users[email]
+
+	if !isExists {
+		err := exception.New("Unable retrieve user")
+		return model.User{}, err
+	}
+
+	return user, nil
 }
 
 func LoginUser(email, password string) (*views.UserResponse, error) {

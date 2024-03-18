@@ -37,10 +37,10 @@ func FilterRequest(next echo.HandlerFunc) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusUnauthorized, "Please pass the token")
 		}
 
-		err := util.VerifyToken(tokenString[7:])
+		err, _ := util.VerifyToken(tokenString)
 
 		if err != nil {
-			return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
+			return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
 		} else {
 			return next(e)
 		}
