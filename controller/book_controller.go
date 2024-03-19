@@ -87,5 +87,25 @@ func (b *BookController) deleteBook(e echo.Context) error {
 		return e.JSON(http.StatusUnauthorized, exception.NewExceptionResponse("Only admins can delete book"))
 	}
 
+	req := e.Request().Body
+
+	var payload views.BookDTO
+
+	payloadBytes, err := io.ReadAll(req)
+
+	if err != nil {
+		return e.JSON(http.StatusBadRequest, exception.NewExceptionResponse("Payload is incorrect"))
+	}
+
+	json.Unmarshal(payloadBytes, &payload)
+
+	err = b.bookService.DeleteBook(payload.BookName)
+
+	if err != nil {
+		return e.JSON(http.StatusInternalServerError, exception.NewExceptionResponse(err.Error()))
+	}
+
+	return e.JSON(http.StatusOK, e.JSON(http.StatusOK, "Book Deleted"))
+
 	return nil
 }

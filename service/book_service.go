@@ -112,18 +112,83 @@ func (b *BookService) AddBook(request views.BookDTO) error {
 		return err
 	}
 
-	/*	csvwriter := csv.NewWriter(file)
+	return nil
+}
 
-		record := []string{request.BookName, request.Author, request.PublicationYear}
+func (b *BookService) DeleteBook(bookName string) error {
 
-		err = csvwriter.Write(record)
-		if err != nil {
-			log.Error("Unable to add new book")
-			return err
-		}*/
+	if strings.TrimSpace(bookName) == "" {
+		return exception.New("Book Name is missing")
+	}
+
+	file, err := os.Open("resources/regularUser.csv")
+
+	if err != nil {
+		log.Error(err)
+		return err
+	}
+
+	csvReader := csv.NewReader(file)
+	records, err := csvReader.ReadAll()
+
+	if err != nil {
+		log.Error(err)
+		return nil
+	}
+
+	var books []views.BookDTO
+
+	for i, record := range records {
+		if i == 0 {
+			continue
+		}
+
+		book := views.BookDTO{
+			BookName:        fmt.Sprintf("\"%s\"", record[0]),
+			Author:          record[1],
+			PublicationYear: record[2],
+		}
+
+		books = append(books, book)
+	}
+
+	file.Close()
+
+	err = os.Truncate("resources/regularUser.csv", 0)
+
+	if err != nil {
+		return exception.New("Something went wrong while deleting book")
+	}
+
+	file, err = os.OpenFile("resources/regularUser.csv", os.O_APPEND|os.O_WRONLY, 0644)
+
+	if err != nil {
+		log.Error(err)
+		return err
+	}
+
+	defer file.Close()
+
+	_, err = file.WriteString(fmt.Sprintf("%s,%s,%s\n", "Book Name", "Author", "Publication Year"))
+	if err != nil {
+		log.Error("Unable to delete book")
+		return err
+	}
+
+	for _, record := range books {
+
+		if strings.ToLower(strings.Trim(record.BookName, "\"")) == strings.ToLower(bookName) {
+			continue
+		} else {
+			_, err = file.WriteString(fmt.Sprintf("%s,%s,%s\n", record.BookName, record.Author, record.PublicationYear))
+			if err != nil {
+				log.Error("Unable to delete book")
+				return err
+			}
+		}
+	}
 
 	return nil
-
 }
 
 func validateFields(request *views.BookDTO) error {
