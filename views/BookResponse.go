@@ -1,6 +1,6 @@
 package views
 
-type BookResponse struct {
+type BookDTO struct {
 	BookName        string `json:"book_name"`
 	Author          string `json:"author"`
 	PublicationYear string `json:"publication_year"`

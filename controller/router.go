@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/labstack/echo/v4"
+	"gomvc/exception"
 	"gomvc/service"
 	"gomvc/util"
 	"net/http"
@@ -50,7 +51,7 @@ func FilterRequest(next echo.HandlerFunc) echo.HandlerFunc {
 func (c *Controllers) loginUser(e echo.Context) error {
 	res, err := c.userService.LoginUser(e.QueryParam("email"), e.QueryParam("password"))
 	if err != nil {
-		return echo.NewHTTPError(500, err.Error())
+		return echo.NewHTTPError(500, exception.NewExceptionResponse(err.Error()))
 	} else {
 		return e.JSON(http.StatusOK, res)
 	}
@@ -60,7 +61,7 @@ func (c *Controllers) validateToken(e echo.Context) error {
 	err := c.userService.ValidateToken(e.Request().Header.Get("Authorization"))
 
 	if err != nil {
-		return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
+		return echo.NewHTTPError(http.StatusUnauthorized, exception.NewExceptionResponse(err.Error()))
 	} else {
 		return e.JSON(http.StatusOK, "Valid token")
 	}
