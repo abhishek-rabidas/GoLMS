@@ -3,12 +3,22 @@ package util
 import (
 	"fmt"
 	"github.com/golang-jwt/jwt"
+	"github.com/spf13/viper"
 	"gomvc/exception"
 	"strings"
 	"time"
 )
 
-var secretKey = []byte("a2104991-ecea-4f48-8e3c-612c27afda64")
+var secretKey []byte
+
+func init() {
+	viper.SetConfigFile("resources/config.json")
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(err)
+	}
+	secretKey = []byte(viper.GetString("secretKey"))
+}
 
 func GenerateNewTokenForUser(email string, userType string) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
