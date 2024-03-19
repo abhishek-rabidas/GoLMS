@@ -106,6 +106,4 @@ func (b *BookController) deleteBook(e echo.Context) error {
 	}
 
 	return e.String(http.StatusOK, "Book Deleted")
-
-	return nil
 }
