@@ -34,7 +34,15 @@ func VerifyToken(tokenString string) (error, *jwt.Token) {
 		return secretKey, nil
 	})
 
-	//TODO: Check expiry
+	expirationTime, ok := token.Claims.(jwt.MapClaims)["exp"].(float64)
+
+	if !ok {
+		return exception.New("Invalid token format"), nil
+	}
+
+	if time.Now().Unix() > int64(expirationTime) {
+		return exception.New("Token has expired"), nil
+	}
 
 	if err != nil {
 		return err, nil
