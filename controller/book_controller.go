@@ -70,7 +70,7 @@ func (b *BookController) addBook(e echo.Context) error {
 		return e.JSON(http.StatusInternalServerError, exception.NewExceptionResponse(err.Error()))
 	}
 
-	return e.JSON(http.StatusOK, e.JSON(http.StatusOK, "Book Added"))
+	return e.String(http.StatusOK, "Book Added")
 }
 
 func (b *BookController) deleteBook(e echo.Context) error {
@@ -105,7 +105,7 @@ func (b *BookController) deleteBook(e echo.Context) error {
 		return e.JSON(http.StatusInternalServerError, exception.NewExceptionResponse(err.Error()))
 	}
 
-	return e.JSON(http.StatusOK, e.JSON(http.StatusOK, "Book Deleted"))
+	return e.String(http.StatusOK, "Book Deleted")
 
 	return nil
 }

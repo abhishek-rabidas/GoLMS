@@ -106,7 +106,7 @@ func (b *BookService) AddBook(request views.BookDTO) error {
 
 	defer file.Close()
 
-	_, err = file.WriteString(fmt.Sprintf("\n%s,%s,%s\n", request.BookName, request.Author, request.PublicationYear))
+	_, err = file.WriteString(fmt.Sprintf("\n%s,%s,%s", request.BookName, request.Author, request.PublicationYear))
 	if err != nil {
 		log.Error("Unable to add new book")
 		return err
@@ -169,7 +169,7 @@ func (b *BookService) DeleteBook(bookName string) error {
 
 	defer file.Close()
 
-	_, err = file.WriteString(fmt.Sprintf("%s,%s,%s\n", "Book Name", "Author", "Publication Year"))
+	_, err = file.WriteString(fmt.Sprintf("%s,%s,%s", "Book Name", "Author", "Publication Year"))
 	if err != nil {
 		log.Error("Unable to delete book")
 		return err
@@ -180,7 +180,7 @@ func (b *BookService) DeleteBook(bookName string) error {
 		if strings.ToLower(strings.Trim(record.BookName, "\"")) == strings.ToLower(bookName) {
 			continue
 		} else {
-			_, err = file.WriteString(fmt.Sprintf("%s,%s,%s\n", record.BookName, record.Author, record.PublicationYear))
+			_, err = file.WriteString(fmt.Sprintf("\n%s,%s,%s", record.BookName, record.Author, record.PublicationYear))
 			if err != nil {
 				log.Error("Unable to delete book")
 				return err
