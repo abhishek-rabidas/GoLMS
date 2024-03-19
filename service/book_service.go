@@ -8,6 +8,7 @@ import (
 	"gomvc/model"
 	"gomvc/views"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -106,7 +107,7 @@ func (b *BookService) AddBook(request views.BookDTO) error {
 
 	defer file.Close()
 
-	_, err = file.WriteString(fmt.Sprintf("\n%s,%s,%s", request.BookName, request.Author, request.PublicationYear))
+	_, err = file.WriteString(fmt.Sprintf("\n%s,%s,%s", fmt.Sprintf("\"%s\"", request.BookName), request.Author, request.PublicationYear))
 	if err != nil {
 		log.Error("Unable to add new book")
 		return err
@@ -202,6 +203,16 @@ func validateFields(request *views.BookDTO) error {
 
 	if strings.TrimSpace(request.PublicationYear) == "" {
 		return exception.New("Publication year is missing")
+	} else {
+		year, err := strconv.Atoi(request.PublicationYear)
+
+		if err != nil {
+			return exception.New("Publication year is incorrect")
+		}
+
+		if year >= 2100 || year <= 1900 {
+			return exception.New("Publication year is incorrect")
+		}
 	}
 
 	return nil
