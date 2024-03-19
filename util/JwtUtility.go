@@ -41,7 +41,7 @@ func VerifyToken(tokenString string) (error, *jwt.Token) {
 	}
 
 	if time.Now().Unix() > int64(expirationTime) {
-		return exception.New("Token has expired"), nil
+		return exception.New("Token has expired, relogin"), nil
 	}
 
 	if err != nil {
